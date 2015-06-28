@@ -11,13 +11,13 @@ html
         border thin black solid
         width 1em
         height 1em
-    script.
-      document.addEventListener('DOMContentLoaded', function () {
-        var table = document.getElementById('nac');
-        table.addEventListener("click", function (event) {
-          event.target.innerHTML = "X";
-        });
-      });
+    script: :babel
+      document.addEventListener('DOMContentLoaded', () =>
+        document.getElementById('nac')
+          .addEventListener('click', (event) => {
+            event.target.innerHTML = event.target.innerHTML[0] === 'X' ? 'O' : 'X'
+          })
+      )
   body
     h1 Noughts and crosses
     table#nac
