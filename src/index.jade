@@ -4,6 +4,7 @@ html
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     style: :stylus
+      @import url('http://fonts.googleapis.com/css?family=Lato:100')
       nac-color = #111
       nac-border-style = thin solid nac-color
 
@@ -35,7 +36,7 @@ html
         width device-width
         zoom 1
       html, body
-        font 100 1.2em/1.15 Helvetica Neue, Nimbus Sans L, sans-serif
+        font 100 1.2em/1.15 Helvetica Neue, Lato, DejaVu Sans ExtraLight, Nimbus Sans L, sans-serif
       h1
         font-weight lighter
         display inline-block
@@ -43,6 +44,8 @@ html
       table
         border-spacing 0
         color nac-color
+      table::before
+        // interesting styling for winning diagonal! ;-)
       td
         padding .5em
         overflow hidden
