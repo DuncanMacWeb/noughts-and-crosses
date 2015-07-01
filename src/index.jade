@@ -63,12 +63,38 @@ html
         border-bottom none
 
     script: :babel
-      document.addEventListener('DOMContentLoaded', () =>
-        document.getElementById('nac')
-          .addEventListener('click', (event) => {
-            event.target.innerHTML = event.target.innerHTML[0] === 'X' ? 'O' : 'X'
-          })
-      )
+      document.addEventListener('DOMContentLoaded', () => {
+
+        var playersTurn = 'X';
+        var game = new Array(3);
+        for (var i = 0; i < 3; i++) {
+          game[i] = ['', '', '']
+        }
+
+        var tdList = document.getElementById('nac')
+          .querySelectorAll('td');
+
+        function createOnClick(y, x) {
+          tdList[y*3 + x].addEventListener('click', (event) => {
+            console.log('tdList[' + (y*3 + x).toString() + ']: y = ' + y.toString() + ', x = ' + x.toString());
+            if (game[y][x] === '') {
+              game[y][x] = playersTurn;
+              event.target.innerHTML = playersTurn;
+              if (playersTurn === 'X') {
+                playersTurn = 'O';
+              } else {
+                playersTurn = 'X';
+              }
+            }
+          });
+        }
+
+        for (var y = 0; y < 3; y++) {
+          for (var x = 0; x < 3; x++) {
+            createOnClick(y, x);
+          }
+        }
+      });
   body
     h1 Noughts and crosses
     table#nac
