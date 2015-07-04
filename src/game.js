@@ -1,3 +1,4 @@
+'use strict';
 document.addEventListener('DOMContentLoaded', () => {
 
   var gameFinished = false;
