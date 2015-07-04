@@ -36,24 +36,24 @@ html
         width device-width
         zoom 1
       html, body
-        font 100 1.2em/1.15 Helvetica Neue, Lato, DejaVu Sans ExtraLight, Nimbus Sans L, sans-serif
+        font 1.2em/1.4 Helvetica Neue, Lato, DejaVu Sans ExtraLight, Nimbus Sans L, sans-serif
       h1
-        font-weight lighter
+        font-weight 100 // should switch to 300-weight Lato if that's what's available
+        line-height 1.15
         display inline-block
         linkUnderlines(white, nac-color)
-      table
+      table#nac
         border-spacing 0
         color nac-color
       table::before
         // interesting styling for winning diagonal! ;-)
-      td
+      #nac td
         padding .5em
         overflow hidden
         text-align center
         line-height 1
         vertical-align middle
         cursor pointer
-      #nac td
         border-right nac-border-style
         border-bottom nac-border-style
         width 1em
