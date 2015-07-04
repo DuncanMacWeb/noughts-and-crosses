@@ -5,6 +5,7 @@
   "main": "Gulpfile.js",
   "dependencies": {
     "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0",
     "gulp-jade": "^1.0.1",
     "jade": "^1.11.0",
     "jade-babel": "^5.0.0",
