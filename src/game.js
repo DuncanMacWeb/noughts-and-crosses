@@ -1,6 +1,4 @@
-'use strict';
-document.addEventListener('DOMContentLoaded', () => {
-
+export function runGame() {
   var gameFinished = false;
   var playersTurn = 'X';
   var game = new Array(3);
@@ -82,4 +80,4 @@ document.addEventListener('DOMContentLoaded', () => {
       createOnClick(y, x);
     }
   }
-});
+};

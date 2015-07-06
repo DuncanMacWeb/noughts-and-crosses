@@ -12,7 +12,11 @@
     "nib": "^1.1.0",
     "stylus": "^0.51.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "babelify": "^6.1.2",
+    "browserify": "^10.2.4",
+    "vinyl-source-stream": "^1.1.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
