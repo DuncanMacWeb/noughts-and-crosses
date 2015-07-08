@@ -1,7 +1,7 @@
-import Player from './Player'
+import {Player} from './Player';
 
-export default class HumanPlayer extends Player {
-  constructor() {
+export class HumanPlayer extends Player {
+  constructor () {
     super();
   }
 }

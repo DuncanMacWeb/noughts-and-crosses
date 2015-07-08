@@ -1,5 +1,4 @@
-export default class Player {
-  constructor() {
-
+export class Player {
+  constructor () {
   }
 }
