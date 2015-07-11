@@ -46,23 +46,6 @@ export class NoughtsAndCrosses {
     newPlayer.move().then(this.doPlayerMove);
   }
 
-  onPlay(x, y) {
-    if (!this.gameFinished && this.game[y][x] === '') {
-      this.game[y][x] = this.playersTurn;
-      event.target.innerHTML = this.playersTurn;
-
-      if (this.checkWon()) {
-        this.gameFinished = true;
-      }
-
-      if (this.playersTurn === 'X') {
-        this.playersTurn = 'O';
-      } else {
-        this.playersTurn = 'X';
-      }
-    }
-  }
-
   checkWon() {
     // horizontals
     for (var y = 0; y < 3; y++) {
