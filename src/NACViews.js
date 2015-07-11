@@ -41,12 +41,18 @@ export class NACDOMView extends NACView {
     }
   }
 
+  showMove(coords, playerSymbol) {
+    let x = coords[0];
+    let y = coords[1];
+    this.tdList[y*this.dimensions[1] + x].innerHTML = playerSymbol;
+  }
+
   setClickCallback(clickCallback) {
     this.clickCallback = clickCallback;
   }
 
   createOnClick(x, y) {
-    this.tdList[y*dimensions[1] + x].addEventListener('click', (event) => {
+    this.tdList[y*this.dimensions[1] + x].addEventListener('click', (event) => {
       //console.log('tdList[' + (y*3 + x).toString() + ']: y = ' + y.toString() + ', x = ' + x.toString());
 
       this.clickCallback([x, y]);
