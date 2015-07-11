@@ -26,8 +26,8 @@ export class NACDOMView extends NACView {
     this.element.innerHTML = `<table id="nac">${table}</table>`;
   }
 
-  initPlayCallback(playCallback) {
-    this.playCallback = playCallback;
+  setClickCallback(clickCallback) {
+    this.clickCallback = clickCallback;
   }
 
   initialize(dimensions) {
@@ -47,7 +47,7 @@ export class NACDOMView extends NACView {
     tdList[y*3 + x].addEventListener('click', (event) => {
       //console.log('tdList[' + (y*3 + x).toString() + ']: y = ' + y.toString() + ', x = ' + x.toString());
 
-      this.playCallback(x, y);
+      this.clickCallback(x, y);
     });
   }
 
