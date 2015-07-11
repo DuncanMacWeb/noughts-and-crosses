@@ -8,7 +8,6 @@ export class NoughtsAndCrosses {
     this.view = view;
 
     this.gameFinished = false;
-    this.playersTurn = 0;
     this.players = players;
 
     this.game = new Array(3);
@@ -20,10 +19,8 @@ export class NoughtsAndCrosses {
 
     this.view.initialize(dimensions);
 
-
-    let currentPlayer = this.players[this.playersTurn];
-    let move = currentPlayer.move();
-    move.then(this.doPlayerMove);
+    this.currentPlayer = this.players[0];
+    currentPlayer.move().then(this.doPlayerMove);
   }
 
   static getPlayerSymbol(i) {
@@ -40,10 +37,8 @@ export class NoughtsAndCrosses {
       return;
     }
 
-    this.playersTurn = (this.playersTurn + 1) % this.players.length;
-
-    let newPlayer = this.players[this.playersTurn];
-    newPlayer.move().then(this.doPlayerMove);
+    this.currentPlayer = (this.players.indexOf(this.currentPlayer) + 1) % this.players.length;
+    this.currentPlayer.move().then(this.doPlayerMove);
   }
 
   onPlay(x, y) {
