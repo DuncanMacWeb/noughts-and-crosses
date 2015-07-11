@@ -1,8 +1,7 @@
 export class NACView {
-  constructor() {
+  constructor() { }
+  initialize(dimensions) { } // dimensions is an array
 
-  }
-  initialize(dimensions)
 }
 
 export class NACDOMView extends NACView {
@@ -15,20 +14,16 @@ export class NACDOMView extends NACView {
       throw new Error('NACDOMView requires an element, selector or ID')
     }
 
-    var table = '';
-    for (var y = 0; y < dimensions.y; y++) {
+    let table = '';
+    for (let y = 0; y < dimensions[1]; y++) {
       table += '<tr>';
-      for (var x = 0; x < dimensions.x; x++) {
+      for (let x = 0; x < dimensions[0]; x++) {
         table += '<td></td>';
       }
       table += '</tr>';
     }
 
     this.element.innerHTML = `<table id="nac">${table}</table>`;
-  }
-
-  setClickCallback(clickCallback) {
-    this.clickCallback = clickCallback;
   }
 
   initialize(dimensions) {
@@ -40,15 +35,19 @@ export class NACDOMView extends NACView {
     this.tdList = document.getElementById('nac')
       .querySelectorAll('td');
 
-    for (var y = 0; y < 3; y++) {
-      for (var x = 0; x < 3; x++) {
+    for (let y = 0; y < dimensions[1]; y++) {
+      for (let x = 0; x < dimensions[0]; x++) {
         this.createOnClick(x, y);
       }
     }
   }
 
+  setClickCallback(clickCallback) {
+    this.clickCallback = clickCallback;
+  }
+
   createOnClick(x, y) {
-    tdList[y*3 + x].addEventListener('click', (event) => {
+    tdList[y*dimensions[1] + x].addEventListener('click', (event) => {
       //console.log('tdList[' + (y*3 + x).toString() + ']: y = ' + y.toString() + ', x = ' + x.toString());
 
       this.clickCallback(x, y);
