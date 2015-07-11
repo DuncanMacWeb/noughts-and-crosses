@@ -13,6 +13,13 @@ export class NACDOMView extends NACView {
     if (!('appendChild' in this.element)) {
       throw new Error('NACDOMView requires an element, selector or ID')
     }
+  }
+
+  initialize(dimensions) {
+    if (dimensions.length > 2) {
+      throw new Error('NACDOMView doesn’t support more than two dimensions, sorry!');
+    }
+    this.dimensions = dimensions;
 
     let table = '';
     for (let y = 0; y < dimensions[1]; y++) {
@@ -22,15 +29,7 @@ export class NACDOMView extends NACView {
       }
       table += '</tr>';
     }
-
     this.element.innerHTML = `<table id="nac">${table}</table>`;
-  }
-
-  initialize(dimensions) {
-    if dimensions.length > 2 {
-      throw new Error('NACDOMView doesn’t support more than two dimensions, sorry!');
-    }
-    this.dimensions = dimensions;
 
     this.tdList = document.getElementById('nac')
       .querySelectorAll('td');
@@ -47,7 +46,7 @@ export class NACDOMView extends NACView {
   }
 
   createOnClick(x, y) {
-    tdList[y*dimensions[1] + x].addEventListener('click', (event) => {
+    this.tdList[y*dimensions[1] + x].addEventListener('click', (event) => {
       //console.log('tdList[' + (y*3 + x).toString() + ']: y = ' + y.toString() + ', x = ' + x.toString());
 
       this.clickCallback([x, y]);
