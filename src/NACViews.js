@@ -51,7 +51,7 @@ export class NACDOMView extends NACView {
     tdList[y*3 + x].addEventListener('click', (event) => {
       //console.log('tdList[' + (y*3 + x).toString() + ']: y = ' + y.toString() + ', x = ' + x.toString());
 
-      this.clickCallback(x, y);
+      this.clickCallback([x, y]);
     });
   }
 

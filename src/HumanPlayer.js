@@ -7,8 +7,8 @@ export class HumanPlayer extends Player {
 
   move(view) {
     return new Promise((resolve, reject) => {
-      view.setClickCallback((x, y) => {
-        resolve({x: x, y: y});
+      view.setClickCallback((coords) => {
+        resolve(coords);
       });
     });
   }
