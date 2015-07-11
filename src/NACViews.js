@@ -2,6 +2,7 @@ export class NACView {
   constructor() {
 
   }
+  initialize(dimensions)
 }
 
 export class NACDOMView extends NACView {
@@ -31,6 +32,9 @@ export class NACDOMView extends NACView {
   }
 
   initialize(dimensions) {
+    if dimensions.length > 2 {
+      throw new Error('NACDOMView doesn’t support more than two dimensions, sorry!');
+    }
     this.dimensions = dimensions;
 
     this.tdList = document.getElementById('nac')

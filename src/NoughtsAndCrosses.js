@@ -1,5 +1,9 @@
 export class NoughtsAndCrosses {
-  constructor (players, view, dimensions = {x: 3, y: 3}) {
+  constructor (players, view, dimensions = [3, 3]) {
+
+    if (dimensions.length > 2) {
+      throw new Error('NoughtsAndCrosses doesn’t support more than two dimensions, sorry!');
+    }
 
     this.view = view;
 

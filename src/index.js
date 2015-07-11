@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // TODO: find/set up options object
 
-    // Set up game with dimensions, players and view
+    // Set up game with players, view and dimensions
     let game = new NoughtsAndCrosses(
-      {x: 3, y: 3},
       [new HumanPlayer(), new HumanPlayer()],
-      new NACDOMView() );
+      new NACDOMView(),
+      {x: 3, y: 3} );
   }
 });
