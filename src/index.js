@@ -1,9 +1,10 @@
 import {NoughtsAndCrosses} from './NoughtsAndCrosses';
+import {NACDOMView} from './NACViews';
 import {HumanPlayer} from './HumanPlayer';
 
 document.addEventListener('DOMContentLoaded', () => {
   if (document.querySelector) {
-    let script = document.querySelector('script[data-nac-id]');
+    let script = document.querySelector('script[data-nac-target]');
     if (!script) {
       return;
     }
@@ -15,8 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // TODO: find/set up options object
 
-    // Set up game
-    let players = [new HumanPlayer(), new HumanPlayer()];
-    let game = new NoughtsAndCrosses({x:3,y:3}, players, targetEl);
+    // Set up game with dimensions, players and view
+    let game = new NoughtsAndCrosses(
+      {x: 3, y: 3},
+      [new HumanPlayer(), new HumanPlayer()],
+      new NACDOMView() );
   }
 });
