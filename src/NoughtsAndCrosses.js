@@ -1,3 +1,5 @@
+import { multidimensionalArray } from './utilities/array'
+
 export class NoughtsAndCrosses {
   constructor (players, view, dimensions = [3, 3]) {
 
@@ -10,10 +12,7 @@ export class NoughtsAndCrosses {
     this.gameFinished = false;
     this.players = players;
 
-    this.game = new Array(3);
-    for (var i = 0; i < 3; i++) {
-      this.game[i] = ['', '', '']
-    }
+    this.game = multidimensionalArray(dimensions);
 
     this.view.initPlayCallback(this.onPlay);
 
