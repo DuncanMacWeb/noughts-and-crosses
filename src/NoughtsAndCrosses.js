@@ -22,7 +22,7 @@ export class NoughtsAndCrosses {
     currentPlayer.move().then(this.doPlayerMove);
   }
 
-  static getPlayerSymbol(i) {
+  getPlayerSymbol(i) {
     return ['X', 'O', 'Z'][i];
   }
 
