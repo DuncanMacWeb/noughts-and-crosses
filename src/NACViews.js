@@ -10,8 +10,9 @@ export class NACDOMView extends NACView {
     if (typeof element === 'string') {
        this.element = document.querySelector(element) || document.getElementById(element)
     }
-    if (!('appendChild' in this.element)) {
-      throw new Error('NACDOMView requires an element, selector or ID')
+    /* IE8 doesn’t implement addEventListener, but we should polyfill it before this check */
+    if ( !('addEventListener' in this.element) ) {
+      throw new TypeError('NACDOMView requires an element, selector or ID')
     }
   }
 
