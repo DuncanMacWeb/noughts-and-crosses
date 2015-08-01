@@ -9,9 +9,11 @@ export class NACDOMView extends NACView {
     super();
     if (typeof element === 'string') {
        this.element = document.querySelector(element) || document.getElementById(element)
+    } else {
+      this.element = element;
     }
     /* IE8 doesn’t implement addEventListener, but we should polyfill it before this check */
-    if ( !('addEventListener' in this.element) ) {
+    if (!this.element.addEventListener) {
       throw new TypeError('NACDOMView requires an element, selector or ID')
     }
 

@@ -2,7 +2,6 @@ import { multidimensionalArray } from './utilities/array'
 
 export class NoughtsAndCrosses {
   constructor (players, view, dimensions = [3, 3]) {
-
     if (dimensions.length > 2) {
       throw new Error('NoughtsAndCrosses doesn’t support more than two dimensions, sorry!');
     }
@@ -18,7 +17,7 @@ export class NoughtsAndCrosses {
     this.view.initialize(dimensions);
 
     this.currentPlayer = this.players[0];
-    currentPlayer.move().then(this.doPlayerMove);
+    this.currentPlayer.move(this.view).then(this.doPlayerMove);
   }
 
   getPlayerSymbol(i) {
@@ -40,7 +39,7 @@ export class NoughtsAndCrosses {
 
     let nextPlayerIndex = (this.players.indexOf(this.currentPlayer) + 1) % this.players.length;
     this.currentPlayer = this.players[nextPlayerIndex];
-    this.currentPlayer.move().then(this.doPlayerMove);
+    this.currentPlayer.move(this.view).then(this.doPlayerMove);
   }
 
   checkWon() {
