@@ -21,10 +21,12 @@ gulp.task('html', function () {
 // from http://advantcomp.com/blog/ES6Modules/
 gulp.task('modules', function() {
     browserify({
-    entries: './src/index.js',
-    debug: true
+      entries: './src/index.js',
+      debug: true
     })
-    .transform(babelify)
+    .transform(babelify.configure({
+      stage: 0
+    }))
     .bundle()
     .pipe(source('index.js'))
     .pipe(gulp.dest('./dist'));
