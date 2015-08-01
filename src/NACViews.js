@@ -16,7 +16,7 @@ export class NACDOMView extends NACView {
     }
 
     this.options = options;
-    this.options.winHighlightColour ||= 'red';
+    this.options.winHighlightColour = this.options.winHighlightColour || 'red';
   }
 
   initialize(dimensions) {
@@ -40,7 +40,7 @@ export class NACDOMView extends NACView {
 
     for (let y = 0; y < dimensions[1]; y++) {
       for (let x = 0; x < dimensions[0]; x++) {
-        this.createOnClick(x, y);
+        this.createInputCallback(x, y);
       }
     }
   }
@@ -51,15 +51,18 @@ export class NACDOMView extends NACView {
     this.tdList[y*this.dimensions[1] + x].innerHTML = playerSymbol;
   }
 
-  setClickCallback(clickCallback) {
-    this.clickCallback = clickCallback;
+  setInputCallback(inputCallback) {
+    this.inputCallback = inputCallback;
   }
 
-  createOnClick(x, y) {
+  createInputCallback(x, y) {
     this.tdList[y*this.dimensions[1] + x].addEventListener('click', (event) => {
       //console.log('tdList[' + (y*3 + x).toString() + ']: y = ' + y.toString() + ', x = ' + x.toString());
 
-      this.clickCallback([x, y]);
+      if (this.inputCallback) {
+        this.inputCallback([x, y]);
+        this.inputCallback = undefined;
+      };
     });
   }
 
