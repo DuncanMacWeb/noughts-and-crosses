@@ -12,6 +12,7 @@ export class NoughtsAndCrosses {
     this.gameFinished = false;
     this.players = players;
 
+    this.dimensions = dimensions;
     this.game = multidimensionalArray(dimensions);
 
     this.view.initPlayCallback(this.onPlay);
@@ -38,42 +39,53 @@ export class NoughtsAndCrosses {
       return;
     }
 
-    this.currentPlayer = (this.players.indexOf(this.currentPlayer) + 1) % this.players.length;
+    let nextPlayerIndex = (this.players.indexOf(this.currentPlayer) + 1) % this.players.length;
+    this.currentPlayer = this.players[nextPlayerIndex];
     this.currentPlayer.move().then(this.doPlayerMove);
   }
 
   checkWon() {
     // horizontals
-    for (var y = 0; y < 3; y++) {
-      if (this.game[y][0] !== '' && (this.game[y][0] === this.game[y][1]) && (this.game[y][1] === this.game[y][2])) {
-        this.view.highlightWin(
-          tdList[y*3],
-          tdList[y*3 + 1],
-          tdList[y*3 + 2]);
+    for (var y = 0; y < this.dimensions[1]; y++) {
+      if (this.game[y][0] !== undefined && (this.game[y][0] === this.game[y][1]) && (this.game[y][1] === this.game[y][2])) {
+        let highlightCoords = [];
+        for (let x = 0; x < this.dimensions[0]; x++) {
+          highlightCoords.push([x, y]);
+        }
+        this.view.highlightWin(highlightCoords);
         return true;
       }
     }
 
     // verticals
-    for (var x = 0; x < 3; x++) {
-      if (this.game[0][x] !== '' && (this.game[0][x] === this.game[1][x]) && (this.game[1][x] === this.game[2][x])) {
-        this.view.highlightWin(
-          tdList[x],
-          tdList[1*3 + x],
-          tdList[2*3 + x]);
+    for (var x = 0; x < this.dimensions[0]; x++) {
+      if (this.game[0][x] !== undefined && (this.game[0][x] === this.game[1][x]) && (this.game[1][x] === this.game[2][x])) {
+        let highlightCoords = [];
+        for (let y = 0; y < this.dimensions[1]; y++) {
+          highlightCoords.push([x, y]);
+        }
+        this.view.highlightWin(highlightCoords);
         return true;
       }
     }
 
     // diagonals
-    if (this.game[0][0] !== '' && (this.game[0][0] === this.game[1][1]) && (this.game[1][1] === this.game[2][2])) {
-      this.view.highlightWin(
-        tdList[0], tdList[4], tdList[8]);
+    if (this.game[0][0] !== undefined && (this.game[0][0] === this.game[1][1]) && (this.game[1][1] === this.game[2][2])) {
+      let highlightCoords = [];
+      let diagLength = this.dimensions[0] < this.dimensions[1] ? this.dimensions[0] : this.dimensions[1];
+      for (let i = 0; i < diagLength; i++) {
+        highlightCoords.push([i, i]);
+      }
+      this.view.highlightWin(highlightCoords);
       return true;
     }
-    if (this.game[0][2] !== '' && (this.game[0][2] === this.game[1][1]) && (this.game[1][1] === this.game[2][0])) {
-      this.view.highlightWin(
-        tdList[2], tdList[4], tdList[6]);
+    if (this.game[0][2] !== undefined && (this.game[0][2] === this.game[1][1]) && (this.game[1][1] === this.game[2][0])) {
+      let highlightCoords = [];
+      let diagLength = this.dimensions[0] < this.dimensions[1] ? this.dimensions[0] : this.dimensions[1];
+      for (let i = 0; i < diagLength; i++) {
+        highlightCoords.push([i, this.dimensions[1] - i]);
+      }
+      this.view.highlightWin(highlightCoords);
       return true;
     }
 
