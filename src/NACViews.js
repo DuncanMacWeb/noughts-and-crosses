@@ -60,10 +60,12 @@ export class NACDOMView extends NACView {
     });
   }
 
-  highlightWin(el1, el2, el3) {
-    console.log(this.playersTurn + ' has won');
-    el1.style.background = 'red';
-    el2.style.background = 'red';
-    el3.style.background = 'red';
+  highlightWin(coordsList) {
+    for (let coords of coordsList) {
+      let x = coords[0];
+      let y = coords[1];
+      let el = this.tdList[y*this.dimensions[1] + x];
+      el.style.background = 'red';
+    }
   }
 }
