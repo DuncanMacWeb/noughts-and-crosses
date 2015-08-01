@@ -8,7 +8,7 @@
  *      [4, 3, 2] : a three-dimensional array of 4×3×2
  *      [20, 20, 5, 37] : a four-dimensional array of 20×20×5×37
  */
-export const multidimensionalArray = (dimensions) => {
+export function multidimensionalArray(dimensions) {
   if (!(dimensions instanceof Array) || dimensions.length < 1) {
     throw new Error('multidimensionalArray takes an array of integers, each specifying the size of each dimension');
   }

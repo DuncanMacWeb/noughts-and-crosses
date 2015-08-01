@@ -32,4 +32,17 @@ gulp.task('modules', function() {
     .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('default', ['html', 'modules']);
+gulp.task('tests', function() {
+    browserify({
+      entries: './src/test/array.js',
+      debug: true
+    })
+    .transform(babelify.configure({
+      stage: 0
+    }))
+    .bundle()
+    .pipe(source('bundle.js'))
+    .pipe(gulp.dest('./test'));
+});
+
+gulp.task('default', ['html', 'modules', 'tests']);
