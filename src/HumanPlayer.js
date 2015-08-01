@@ -5,12 +5,9 @@ export class HumanPlayer extends Player {
     super();
   }
 
-  move(view) {
-    return new Promise((resolve, reject) => {
-      view.setClickCallback((coords) => {
-        resolve(coords);
-      });
-    });
-  }
-
+  move = (view) => new Promise(
+    (resolve, reject) => view.setInputCallback(
+      (coords) => resolve(coords)
+    )
+  );
 }
