@@ -23,7 +23,9 @@ export class NoughtsAndCrosses {
   }
 
   getPlayerSymbol(i) {
-    return ['X', 'O', 'Z'][i];
+    const symbols = ['X', 'O', 'Z'],
+      len = symbols.length;
+    return i < len ? symbols[i] : (i - len).toString();
   }
 
   doPlayerMove(coords) {
