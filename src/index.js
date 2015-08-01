@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set up game with players, view and dimensions
     let game = new NoughtsAndCrosses(
       [new HumanPlayer(), new HumanPlayer()],
-      new NACDOMView(targetEl),
-      {x: 3, y: 3} );
+      new NACDOMView(targetEl) );
   }
 });
