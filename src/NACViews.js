@@ -5,7 +5,7 @@ export class NACView {
 }
 
 export class NACDOMView extends NACView {
-  constructor(element) {
+  constructor(element, options = {}) {
     super();
     if (typeof element === 'string') {
        this.element = document.querySelector(element) || document.getElementById(element)
@@ -14,6 +14,9 @@ export class NACDOMView extends NACView {
     if ( !('addEventListener' in this.element) ) {
       throw new TypeError('NACDOMView requires an element, selector or ID')
     }
+
+    this.options = options;
+    this.options.winHighlightColour ||= 'red';
   }
 
   initialize(dimensions) {
@@ -65,7 +68,7 @@ export class NACDOMView extends NACView {
       let x = coords[0];
       let y = coords[1];
       let el = this.tdList[y*this.dimensions[1] + x];
-      el.style.background = 'red';
+      el.style.background = this.options.winHighlightColour;
     }
   }
 }
