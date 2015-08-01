@@ -4,7 +4,7 @@ import {HumanPlayer} from './HumanPlayer';
 
 document.addEventListener('DOMContentLoaded', () => {
   if (document.querySelector) {
-    let script = document.querySelector('script[data-nac-target]');
+    let script = document.querySelector('script[data-nac-id]');
     if (!script) {
       return;
     }
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set up game with players, view and dimensions
     let game = new NoughtsAndCrosses(
       [new HumanPlayer(), new HumanPlayer()],
-      new NACDOMView(),
+      new NACDOMView(targetEl),
       {x: 3, y: 3} );
   }
 });
