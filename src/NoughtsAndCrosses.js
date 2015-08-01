@@ -15,8 +15,6 @@ export class NoughtsAndCrosses {
     this.dimensions = dimensions;
     this.game = multidimensionalArray(dimensions);
 
-    this.view.initPlayCallback(this.onPlay);
-
     this.view.initialize(dimensions);
 
     this.currentPlayer = this.players[0];
@@ -30,7 +28,8 @@ export class NoughtsAndCrosses {
   }
 
   doPlayerMove(coords) {
-    let playerSymbol = this.getPlayerSymbol(this.playersTurn);
+    let playerSymbol = this.getPlayerSymbol(this.players.indexOf(this.currentPlayer));
+    let x = coords[0], y = coords[1];
     this.game[y][x] = playerSymbol;
     this.view.showMove(coords, playerSymbol);
 
@@ -46,7 +45,7 @@ export class NoughtsAndCrosses {
 
   checkWon() {
     // horizontals
-    for (var y = 0; y < this.dimensions[1]; y++) {
+    for (let y = 0; y < this.dimensions[1]; y++) {
       if (this.game[y][0] !== undefined && (this.game[y][0] === this.game[y][1]) && (this.game[y][1] === this.game[y][2])) {
         let highlightCoords = [];
         for (let x = 0; x < this.dimensions[0]; x++) {
@@ -58,7 +57,7 @@ export class NoughtsAndCrosses {
     }
 
     // verticals
-    for (var x = 0; x < this.dimensions[0]; x++) {
+    for (let x = 0; x < this.dimensions[0]; x++) {
       if (this.game[0][x] !== undefined && (this.game[0][x] === this.game[1][x]) && (this.game[1][x] === this.game[2][x])) {
         let highlightCoords = [];
         for (let y = 0; y < this.dimensions[1]; y++) {
