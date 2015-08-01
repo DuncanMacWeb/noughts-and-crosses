@@ -1,7 +1,9 @@
 export class NACView {
   constructor() { }
   initialize(dimensions) { } // dimensions is an array
-
+  showMove(coords, playerSymbol) {}
+  setInputCallback(inputCallback) {}
+  highlightWin(coordsList) {}
 }
 
 export class NACDOMView extends NACView {

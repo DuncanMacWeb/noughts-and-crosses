@@ -42,7 +42,6 @@ gulp.task('tests', function (cb) {
     var b = browserify(browserifyOpts);
     b.add(require.resolve('babel/polyfill'));
     files.forEach(function (file) {
-      console.log('found test file ' + file.toString());
       b.add(file);
     });
     b.transform(babelify.configure(babelOpts));
