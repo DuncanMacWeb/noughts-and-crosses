@@ -51,7 +51,7 @@ export class NoughtsAndCrosses {
     this.currentPlayer.move().then(this.doPlayerMove);
   }
 
-  findDirections(nDimensions) {
+  findDirections(nDimensions = this.dimensions.length) {
     /*  for every dimension,
           for every other dimension,
             look in every direction:
@@ -113,8 +113,9 @@ export class NoughtsAndCrosses {
             results.push([...c, w]) :             // add this result
             ( () => { throw allzerosreached } )() // otherwise (zeros!!!) STOP
       );
-    if (nDimensions < 2) return [1, 0]; // bail early if this is a 1-D game!!
+    if (nDimensions < 2) return [1]; // bail early if this is a 1-D game!!
     try {
+      // next line must be [1, 0] not vice versa, ∵ d() will throw during the 0 recursion
       [1, 0].forEach( w => d(  // for each way w in [1, 0] (∵ [-1, ...] is duplicates)
           // one dimension’s catered for with [1, 0]; subtract one more to end on 0
           nDimensions - 2,
