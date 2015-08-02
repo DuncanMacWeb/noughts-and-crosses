@@ -1,7 +1,13 @@
 import { multidimensionalArray } from './utilities/array'
 
 export class NoughtsAndCrosses {
-  constructor (players, view, dimensions = [3, 3]) {
+  /*  NoughtsAndCrosses(players, view, [dimensions, k])
+   *    players     : array of Player objects
+   *    view        : a NACView object (or subclass such as NACDOMView)
+   *    dimensions  : an array of dimensions
+   *    k           : the length of the winning line (see m,n,k-game on Wikipedia)
+   */
+  constructor (players, view, dimensions = [3, 3], k = undefined) {
 
     if (dimensions.length > 2) {
       throw new Error('NoughtsAndCrosses doesn’t support more than two dimensions, sorry!');
@@ -14,6 +20,8 @@ export class NoughtsAndCrosses {
 
     this.dimensions = dimensions;
     this.game = multidimensionalArray(dimensions);
+
+    this.k = k ? k : dimensions[0];
 
     this.view.initialize(dimensions);
 
@@ -43,50 +51,88 @@ export class NoughtsAndCrosses {
     this.currentPlayer.move().then(this.doPlayerMove);
   }
 
+  findDirections(nDimensions) {
+    /*  for every dimension,
+          for every other dimension,
+            look in every direction:
+              [-1, 0, +1]             */
+
+    /* These are the 'directions' for up to 3 dimensions:
+        Key: ! all-zero (all-zeros means no movement)
+             > duplicate
+      [-1]  [-1, -1],  [-1, -1, -1],
+                       [-1, -1,  0],
+                       [-1, -1,  1]
+            [-1,  0],  [-1,  0, -1],
+                       [-1,  0,  0],
+                       [-1,  0,  1]
+            [-1,  1]   [-1,  1, -1],
+                       [-1,  1,  0],
+                       [-1,  1,  1]
+     ![ 0]  [0,  -1],  [ 0, -1, -1],
+                       [ 0, -1,  0],
+                       [ 0, -1,  1]
+           ![0,   0],  [ 0,  0, -1],
+                      ![ 0,  0,  0]
+                      >[ 0,  0,  1]
+           >[0,   1]  >[ 0,  1, -1],
+                      >[ 0,  1,  0],
+                      >[ 0,  1,  1]
+     >[ 1] >[1,  -1], >[ 1, -1, -1],
+                      >[ 1, -1,  0],
+                      >[ 1, -1,  1]
+           >[1,   0], >[ 1,  0, -1],
+                      >[ 1,  0,  0],
+                      >[ 1,  0,  1]
+           >[1,   1]  >[ 1,  1, -1],
+                      >[ 1,  1,  0],
+                      >[ 1,  1,  1]
+       we can see that:
+        If we always return [..., -1|0|1] plus the result of calling ourselves
+         with a flag indicating whether we are all zero so far or not,
+         *except* IF WE ARE ALL ZERO where we return only the result of calling
+         ourselves with [..., -1] AND EXIT THE LOOP on the final dimension,
+        then we ought to reproduce the table above.
+        -------
+        1. Make array starting at -1: recurse, adding [-1|0|1]
+        2. Append array starting at 0: recurse, adding [-1|0|1]
+            until all-zeros is reached at the final dimension
+        
+      The following code has ways reversed ([1, 0, -1]) so we’ll be most efficient
+      searching from the top left rather than bottom right in a 2D game.      */
+
+    let results = [], ways = [1, 0, -1], // forwards, stay still, backwards
+      allzerosreached = 'NoughtsAndCrosses.directions: all-zeros reached',
+      /* ds: dimensions left to deal with
+         nz: all non-zero so far? (Boolean)
+         c: current result so far */
+      d = (ds, nz, c) => ways.forEach(
+        w => ds ? // for every way w, if we haven’t reached the final dimension yet,
+          d(ds - 1, nz || w, [...c, w]) : // call ourselves maintining nz; otherwise,
+          nz || w ?                               // if we're non-zero,
+            results.push([...c, w]) :             // add this result
+            ( () => { throw allzerosreached } )() // otherwise (zeros!!!) STOP
+      );
+    if (nDimensions < 2) return [1, 0]; // bail early if this is a 1-D game!!
+    try {
+      [1, 0].forEach( w => d(  // for each way w in [1, 0] (∵ [-1, ...] is duplicates)
+          // one dimension’s catered for with [1, 0]; subtract one more to end on 0
+          nDimensions - 2,
+          !!w, // to make a Boolean indicating if we’re all non-zero so far
+          [w]  // copy w into the `c` array argument to be the current working copy
+        )
+      );
+    } catch (e) {
+      if (e !== allzerosreached) throw e
+    }
+    return results
+  }
+
   checkWon() {
-    // horizontals
-    for (let y = 0; y < this.dimensions[1]; y++) {
-      if (this.game[y][0] !== undefined && (this.game[y][0] === this.game[y][1]) && (this.game[y][1] === this.game[y][2])) {
-        let highlightCoords = [];
-        for (let x = 0; x < this.dimensions[0]; x++) {
-          highlightCoords.push([x, y]);
-        }
-        this.view.highlightWin(highlightCoords);
-        return true;
-      }
-    }
-
-    // verticals
-    for (let x = 0; x < this.dimensions[0]; x++) {
-      if (this.game[0][x] !== undefined && (this.game[0][x] === this.game[1][x]) && (this.game[1][x] === this.game[2][x])) {
-        let highlightCoords = [];
-        for (let y = 0; y < this.dimensions[1]; y++) {
-          highlightCoords.push([x, y]);
-        }
-        this.view.highlightWin(highlightCoords);
-        return true;
-      }
-    }
-
-    // diagonals
-    if (this.game[0][0] !== undefined && (this.game[0][0] === this.game[1][1]) && (this.game[1][1] === this.game[2][2])) {
-      let highlightCoords = [];
-      let diagLength = this.dimensions[0] < this.dimensions[1] ? this.dimensions[0] : this.dimensions[1];
-      for (let i = 0; i < diagLength; i++) {
-        highlightCoords.push([i, i]);
-      }
-      this.view.highlightWin(highlightCoords);
-      return true;
-    }
-    if (this.game[0][2] !== undefined && (this.game[0][2] === this.game[1][1]) && (this.game[1][1] === this.game[2][0])) {
-      let highlightCoords = [];
-      let diagLength = this.dimensions[0] < this.dimensions[1] ? this.dimensions[0] : this.dimensions[1];
-      for (let i = 0; i < diagLength; i++) {
-        highlightCoords.push([i, this.dimensions[1] - i]);
-      }
-      this.view.highlightWin(highlightCoords);
-      return true;
-    }
+    /* this.dimensions = [...]
+       this.game = [...]
+       output: this.view.highlightWin(highlightCoords = [[coord], [coord]])
+     */
 
     return false;
   }
