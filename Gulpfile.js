@@ -30,6 +30,7 @@ var babelOpts = {
 
 gulp.task('modules', function() {
   var b = browserify(browserifyOpts);
+  b.add(require.resolve('source-map-support/register'));
   b.add(require.resolve('babel/polyfill'));
   b.add('./src/index.js');
 
