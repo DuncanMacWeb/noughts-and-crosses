@@ -86,7 +86,7 @@ export class NoughtsAndCrosses {
       let highlightCoords = [];
       let diagLength = this.dimensions[0] < this.dimensions[1] ? this.dimensions[0] : this.dimensions[1];
       for (let i = 0; i < diagLength; i++) {
-        highlightCoords.push([i, this.dimensions[1] - i]);
+        highlightCoords.push([i, this.dimensions[1] - i - 1]);
       }
       this.view.highlightWin(highlightCoords);
       return true;
