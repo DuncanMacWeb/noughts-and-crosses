@@ -7,6 +7,8 @@ var babelify = require('babelify');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var glob = require('glob');
+var buffer = require('vinyl-buffer');
+var sourcemaps = require('gulp-sourcemaps');
 
 jade.filters.babel = jadeBabel({ stage: 0 });
 
@@ -34,6 +36,9 @@ gulp.task('modules', function() {
   b.transform(babelify.configure(babelOpts))
   .bundle()
   .pipe(source('index.js'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init({ loadMaps: true }))
+  .pipe(sourcemaps.write('./'))
   .pipe(gulp.dest('./dist'));
 });
 
@@ -47,6 +52,9 @@ gulp.task('tests', function (cb) {
     b.transform(babelify.configure(babelOpts));
     b.bundle()
     .pipe(source('bundle.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({ loadMaps: true }))
+    .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./test'));
     cb();
   });

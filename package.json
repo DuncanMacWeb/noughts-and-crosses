@@ -17,10 +17,13 @@
     "babelify": "^6.1.2",
     "browserify": "^10.2.4",
     "glob": "^5.0.14",
+    "gulp-sourcemaps": "^1.5.2",
+    "source-map-support": "^0.3.2",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --require source-map-support/register"
   },
   "repository": {
     "type": "git",
