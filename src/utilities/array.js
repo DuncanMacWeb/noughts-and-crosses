@@ -13,11 +13,16 @@ export function multidimensionalArray(dimensions) {
     throw new Error('multidimensionalArray takes an array of integers, each specifying the size of each dimension');
   }
   dimensions = dimensions.slice();
-  return dimensions.length > 1 ?
+  if (dimensions.length > 1) {
     /* if still multi-dimensional, make a new array with the length of the first
      dimension, and fill every element of it with a multidimensional array made of
      the remaining dimensions */
-    new Array( dimensions.shift() ).fill( multidimensionalArray(dimensions) ) :
+      let a = new Array( dimensions.shift() );
+      /* new Array().map() doesn't iterate over array elements that haven’t been set
+        even though the length property has been set, so we have to call fill(someValue) */
+      return a.fill(undefined).map( el => multidimensionalArray(dimensions) );
+  } else {
     /* otherwise (just one dimension left), return an array of that length */
-    new Array( dimensions[0] );
+    return new Array( dimensions[0] );
+  }
 }
