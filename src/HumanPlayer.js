@@ -5,7 +5,7 @@ export class HumanPlayer extends Player {
     super();
   }
 
-  move = (view) => new Promise(
+  move = (game, view) => new Promise(
     (resolve, reject) => view.setInputCallback(
       (coords) => resolve(coords)
     )

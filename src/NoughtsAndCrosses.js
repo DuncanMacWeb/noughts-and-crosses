@@ -12,7 +12,7 @@ export class NoughtsAndCrosses {
     this.players = players;
 
     this.dimensions = dimensions;
-    this.game = multidimensionalArray(dimensions);
+    this.board = multidimensionalArray(dimensions);
 
     this.view.initialize(dimensions);
 
@@ -26,14 +26,14 @@ export class NoughtsAndCrosses {
   }
 
   start() {
-    this.currentPlayer.move(this.view).then((coords) => this.doPlayerMove(coords));
+    this.currentPlayer.move(this, this.view).then((coords) => this.doPlayerMove(coords));
   }
 
   doPlayerMove(coords) {
     const playerIndex = this.players.indexOf(this.currentPlayer);
     const playerSymbol = this.getPlayerSymbol(playerIndex);
     let x = coords[0], y = coords[1];
-    this.game[y][x] = playerIndex;
+    this.board[y][x] = playerIndex;
     this.view.showMove(coords, playerSymbol);
 
     if (this.checkWon()) {
@@ -44,13 +44,13 @@ export class NoughtsAndCrosses {
 
     let nextPlayerIndex = (playerIndex + 1) % this.players.length;
     this.currentPlayer = this.players[nextPlayerIndex];
-    this.currentPlayer.move(this.view).then((coords) => this.doPlayerMove(coords));
+    this.currentPlayer.move(this, this.view).then((coords) => this.doPlayerMove(coords));
   }
 
   checkWon() {
     // horizontals
     for (let y = 0; y < this.dimensions[1]; y++) {
-      if (this.game[y][0] !== undefined && (this.game[y][0] === this.game[y][1]) && (this.game[y][1] === this.game[y][2])) {
+      if (this.board[y][0] !== undefined && (this.board[y][0] === this.board[y][1]) && (this.board[y][1] === this.board[y][2])) {
         let highlightCoords = [];
         for (let x = 0; x < this.dimensions[0]; x++) {
           highlightCoords.push([x, y]);
@@ -62,7 +62,7 @@ export class NoughtsAndCrosses {
 
     // verticals
     for (let x = 0; x < this.dimensions[0]; x++) {
-      if (this.game[0][x] !== undefined && (this.game[0][x] === this.game[1][x]) && (this.game[1][x] === this.game[2][x])) {
+      if (this.board[0][x] !== undefined && (this.board[0][x] === this.board[1][x]) && (this.board[1][x] === this.board[2][x])) {
         let highlightCoords = [];
         for (let y = 0; y < this.dimensions[1]; y++) {
           highlightCoords.push([x, y]);
@@ -73,7 +73,7 @@ export class NoughtsAndCrosses {
     }
 
     // diagonals
-    if (this.game[0][0] !== undefined && (this.game[0][0] === this.game[1][1]) && (this.game[1][1] === this.game[2][2])) {
+    if (this.board[0][0] !== undefined && (this.board[0][0] === this.board[1][1]) && (this.board[1][1] === this.board[2][2])) {
       let highlightCoords = [];
       let diagLength = this.dimensions[0] < this.dimensions[1] ? this.dimensions[0] : this.dimensions[1];
       for (let i = 0; i < diagLength; i++) {
@@ -82,7 +82,7 @@ export class NoughtsAndCrosses {
       this.view.highlightWin(highlightCoords);
       return true;
     }
-    if (this.game[0][2] !== undefined && (this.game[0][2] === this.game[1][1]) && (this.game[1][1] === this.game[2][0])) {
+    if (this.board[0][2] !== undefined && (this.board[0][2] === this.board[1][1]) && (this.board[1][1] === this.board[2][0])) {
       let highlightCoords = [];
       let diagLength = this.dimensions[0] < this.dimensions[1] ? this.dimensions[0] : this.dimensions[1];
       for (let i = 0; i < diagLength; i++) {
