@@ -17,21 +17,14 @@ export default class ComputerPlayer extends Player {
     for (let i = 0; i < totalNumCells; i++) {
       let cell = (startCell + i) % totalNumCells;
 
-
-      if (game.getCellByLinearIndex()) {
-
+      if (game.getCellByLinearIndex(cell) === undefined) {
+          return new Promise(
+            (resolve, reject) => resolve(game.getCoordinatesByLinearIndex(cell))
+          );
       }
     }
-    // check if cell is full, if so keep moving on
 
-
-    for (d of view.dimensions.length) {
-
-    }
-
-    return new Promise(
-      (resolve, reject) => resolve(coords)
-    );
+    throw new Error('All cells are occupied - nowhere for computer player to play')
   }
 
 }
