@@ -51,6 +51,10 @@ export class NoughtsAndCrosses {
       .catch((e) => console.error(e.stack));
   }
 
+  getCellByLinearIndex(i) {
+    return this.board[this.getCoordinatesByLinearIndex(i)]
+  }
+
   checkWon() {
     // horizontals
     for (let y = 0; y < this.dimensions[1]; y++) {
