@@ -51,8 +51,22 @@ export class NoughtsAndCrosses {
       .catch((e) => console.error(e.stack));
   }
 
-  getCellByLinearIndex(i) {
-    return this.board[this.getCoordinatesByLinearIndex(i)]
+  getCellByCoords(coords) {
+    // this.board = multidimensionalArray with least-significant dimension first [x, y, z]
+    // this.getCoordinatesByLinearIndex also returns a least-significant-dimension first array
+    // return this.board[...[this.getCoordinatesByLinearIndex(i)]]
+
+    // GCBC == 'getCellByCoords'
+    let _gcbc = (board, coords, dimensions) => {
+      if (dimensions.length > 1) {
+        let m = coords.shift();   // use the least-significant coord
+        return _gcbc(board[m], coords, dimensions - 1);   // call self with least-sig dimension removed
+      } else {
+        return board[coords[0]]   // last dimension -- return value at remaining coord
+      }
+    }
+
+    return _gcbc(this.board, coords, this.dimensions.length);
   }
 
   getCoordinatesByLinearIndex(i) {
