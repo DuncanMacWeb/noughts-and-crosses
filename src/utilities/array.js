@@ -8,10 +8,20 @@
  *      [4, 3, 2] : a three-dimensional array of 4×3×2
  *      [20, 20, 5, 37] : a four-dimensional array of 20×20×5×37
  */
-export const multidimensionalArray = (dimensions) => dimensions.length > 1 ?
-  /* if still multi-dimensional, make a new array with the length of the first
-     dimension, and fill every element of it with a multidimensional array made of
-     the remaining dimensions */
-  new Array( dimensions.shift() ).fill( multidimensionalArray(dimensions) ) :
-  /* otherwise (just one dimension left), return an array of that length */
-  new Array( dimensions[0] );
+export class nDimArray extends Array {
+  constructor(...dimensions = [1]) {
+    super()
+
+    if (!(dimensions instanceof Array) || dimensions.length < 1) {
+      throw new TypeError('multidimensionalArray takes an array of integers, each specifying the size of each dimension');
+    }
+    let _ndA = (dimensions) => !console.log(dimensions) && dimensions.length > 1 ?
+      [...new Array( dimensions.shift() )]
+        .map( (el, index, array) => index ?
+          [...array[0]] :
+          _ndA(dimensions) ) :
+      new Array( dimensions[0] )
+
+    return _ndA(dimensions)
+  }
+}
