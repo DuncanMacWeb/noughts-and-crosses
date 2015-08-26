@@ -26,7 +26,9 @@ export class NoughtsAndCrosses {
   }
 
   start() {
-    this.currentPlayer.move(this, this.view).then((coords) => this.doPlayerMove(coords));
+    this.currentPlayer.move(this, this.view)
+      .then((coords) => this.doPlayerMove(coords))
+      .catch((e) => console.error(e.stack));
   }
 
   doPlayerMove(coords) {
@@ -44,7 +46,9 @@ export class NoughtsAndCrosses {
 
     let nextPlayerIndex = (playerIndex + 1) % this.players.length;
     this.currentPlayer = this.players[nextPlayerIndex];
-    this.currentPlayer.move(this, this.view).then((coords) => this.doPlayerMove(coords));
+    this.currentPlayer.move(this, this.view)
+      .then((coords) => this.doPlayerMove(coords))
+      .catch((e) => console.error(e.stack));
   }
 
   checkWon() {
