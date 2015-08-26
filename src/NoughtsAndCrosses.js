@@ -70,13 +70,24 @@ export class NoughtsAndCrosses {
   }
 
   getCoordinatesByLinearIndex(i) {
-    //console.log('getCoordinatesByLinearIndex(' + i.toString() + ')');
-    let coords = this.dimensions.slice();
+    // Loop over the dimensions from the last to the first.
+    // For each dimension, we calculate the 'dimFactor' which is the multiplier
+    // that was used to calculate that part of the linear coordinate
+    //
+    // E.g.
+    // For a 3x3x3 game, the linear coord = z*9 + y*3 + x
+    // so the dimFactor for the z dimension is 9.
+    //
+    // to get 'z' back, we find out how many multiples of 9 there are
+    // with Math.floor(i / dimFactor)
+    // then since we have used that part of the linear coord, we can modulus the
+    // linear coord by dimFactor for our next dimension...
+    //
+    let coords = new Array(this.dimensions.length);
     for (let d = this.dimensions.length - 1; d > 0; d--) {
-      let m = this.dimensions.slice(0, d).reduce((acc, val) => acc * val);
-      //console.log('i = ' + i.toString() + ' d = ' + d.toString() + ' m = ' + m.toString());
-      coords[d] = Math.floor(i / m);
-      i -= coords[d] * m;
+      let dimFactor = this.dimensions.slice(0, d).reduce((acc, val) => acc * val);
+      coords[d] = Math.floor(i / dimFactor);
+      i = i % dimFactor;
     }
     coords[0] = i;
     return coords;

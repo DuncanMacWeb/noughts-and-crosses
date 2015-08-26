@@ -62,7 +62,7 @@ describe('NoughtsAndCrosses 3x3', function () {
 });
 
 
-describe('NoughtsAndCrosses 3x3 Coords', function () {
+describe('NoughtsAndCrosses Coords', function () {
 
   describe('#getCoordinatesByLinearIndex()', function () {
     it('should transform linear coords to normal ones in 3', function () {
