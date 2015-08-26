@@ -2,9 +2,9 @@ import { multidimensionalArray } from './utilities/array'
 
 export class NoughtsAndCrosses {
   constructor (players, view, dimensions = [3, 3]) {
-    if (dimensions.length > 2) {
+    /*if (dimensions.length > 2) {
       throw new Error('NoughtsAndCrosses doesn’t support more than two dimensions, sorry!');
-    }
+    }*/
 
     this.view = view;
 
@@ -53,6 +53,19 @@ export class NoughtsAndCrosses {
 
   getCellByLinearIndex(i) {
     return this.board[this.getCoordinatesByLinearIndex(i)]
+  }
+
+  getCoordinatesByLinearIndex(i) {
+    //console.log('getCoordinatesByLinearIndex(' + i.toString() + ')');
+    let coords = this.dimensions.slice();
+    for (let d = this.dimensions.length - 1; d > 0; d--) {
+      let m = this.dimensions.slice(0, d).reduce((acc, val) => acc * val);
+      //console.log('i = ' + i.toString() + ' d = ' + d.toString() + ' m = ' + m.toString());
+      coords[d] = Math.floor(i / m);
+      i -= coords[d] * m;
+    }
+    coords[0] = i;
+    return coords;
   }
 
   checkWon() {
