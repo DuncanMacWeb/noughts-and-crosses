@@ -19,14 +19,13 @@ export class NoughtsAndCrosses {
     this.players = players;
 
     this.dimensions = dimensions;
-    this.game = multidimensionalArray(dimensions);
+    this.board = multidimensionalArray(dimensions);
 
     this.k = k ? k : dimensions[0];
 
     this.view.initialize(dimensions);
 
     this.currentPlayer = this.players[0];
-    currentPlayer.move().then(this.doPlayerMove);
   }
 
   getPlayerSymbol(i) {
@@ -35,20 +34,78 @@ export class NoughtsAndCrosses {
     return i < len ? symbols[i] : (i - len).toString();
   }
 
+  start() {
+    this.currentPlayer.move(this, this.view)
+      .then((coords) => this.doPlayerMove(coords))
+      .catch((e) => console.error(e.stack));
+  }
+
   doPlayerMove(coords) {
-    let playerSymbol = this.getPlayerSymbol(this.players.indexOf(this.currentPlayer));
+    const playerIndex = this.players.indexOf(this.currentPlayer);
+    const playerSymbol = this.getPlayerSymbol(playerIndex);
     let x = coords[0], y = coords[1];
-    this.game[y][x] = playerSymbol;
+    this.board[y][x] = playerIndex;
     this.view.showMove(coords, playerSymbol);
 
     if (this.checkWon()) {
+      console.log('Player ' + playerSymbol + ' has won');
       this.gameFinished = true;
       return;
     }
 
-    let nextPlayerIndex = (this.players.indexOf(this.currentPlayer) + 1) % this.players.length;
+    let nextPlayerIndex = (playerIndex + 1) % this.players.length;
     this.currentPlayer = this.players[nextPlayerIndex];
-    this.currentPlayer.move().then(this.doPlayerMove);
+    this.currentPlayer.move(this, this.view)
+      .then((coords) => this.doPlayerMove(coords))
+      .catch((e) => console.error(e.stack));
+  }
+
+  getCellByCoords(coords) {
+    // this.board = multidimensionalArray with least-significant dimension first [x, y, z]
+    // this.getCoordinatesByLinearIndex also returns a least-significant-dimension first array
+    // return this.board[...[this.getCoordinatesByLinearIndex(i)]]
+    if (coords.length !== this.dimensions.length) {
+      throw new Error(`Co-ordinates passed to getCellByCoords not the same length (${coords.length}) as the number of dimensions (${this.dimensions.length})`)
+    }
+
+    // GCBC == 'getCellByCoords'
+    /* function _gcbc(board, coords) {
+      if (coords.length > 1) {
+        let m = coords.shift();   // use the least-significant coord
+        return _gcbc(board[m], coords);   // call self with least-sig dimension removed
+      } else {
+        return board[coords[0]]   // last dimension -- return value at remaining coord
+      }
+    } */
+    let _gcbc = (board, coords) => coords.length > 1 ?
+        _gcbc(board[ coords.shift() ], coords) :
+        board[coords[0]];
+
+    return _gcbc(this.board, coords);
+  }
+
+  getCoordinatesByLinearIndex(i) {
+    // Loop over the dimensions from the last to the first.
+    // For each dimension, we calculate the 'dimFactor' which is the multiplier
+    // that was used to calculate that part of the linear coordinate
+    //
+    // E.g.
+    // For a 3x3x3 game, the linear coord = z*9 + y*3 + x
+    // so the dimFactor for the z dimension is 9.
+    //
+    // to get 'z' back, we find out how many multiples of 9 there are
+    // with Math.floor(i / dimFactor)
+    // then since we have used that part of the linear coord, we can modulus the
+    // linear coord by dimFactor for our next dimension...
+    //
+    let coords = new Array(this.dimensions.length);
+    for (let d = this.dimensions.length - 1; d > 0; d--) {
+      let dimFactor = this.dimensions.slice(0, d).reduce((acc, val) => acc * val);
+      coords[d] = Math.floor(i / dimFactor);
+      i = i % dimFactor;
+    }
+    coords[0] = i;
+    return coords;
   }
 
   findDirections(nDimensions = this.dimensions.length) {

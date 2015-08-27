@@ -20,5 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let game = new NoughtsAndCrosses(
       [new HumanPlayer(), new HumanPlayer()],
       new NACDOMView(targetEl) );
+    game.start();
   }
 });
