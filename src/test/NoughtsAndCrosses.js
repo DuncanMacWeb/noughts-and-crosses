@@ -91,4 +91,21 @@ describe('NoughtsAndCrosses Coords', function () {
       assert.deepEqual(game.getCoordinatesByLinearIndex(9*0 + 3*2 + 1), [1, 2, 0]);
     });
   });
+
+  describe('#getCellByCoords', () => {
+    it('should return “X” for [2, 0, 1] and [1, 2, 2, 4]', () => {
+      let game = new NoughtsAndCrosses([], new NACView(), [3, 3, 3])
+      game.board[2][0][1] = 'X'
+      assert.equal(game.getCellByCoords([2, 0, 1]), 'X')
+
+      game = new NoughtsAndCrosses([], new NACView(), [2, 3, 4, 5])
+      game.board[1][2][2][4] = 'X'
+      assert.equal(game.getCellByCoords([1, 2, 2, 4]), 'X')
+    });
+    it('should raise an error when incorrect numbers of dimensions are passed', () => {
+      let game = new NoughtsAndCrosses([], new NACView(), [3, 3, 3])
+      game.board[2][0][1] = 'X'
+      assert.throws(() => game.getCellByCoords([2, 0, 1, 2]), /not the same length/)
+    })
+  });
 });
