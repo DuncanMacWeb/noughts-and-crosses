@@ -35,7 +35,7 @@ export class NoughtsAndCrosses {
     const playerIndex = this.players.indexOf(this.currentPlayer);
     const playerSymbol = this.getPlayerSymbol(playerIndex);
     let x = coords[0], y = coords[1];
-    this.board[y][x] = playerIndex;
+    this.board[x][y] = playerIndex;
     this.view.showMove(coords, playerSymbol);
 
     if (this.checkWon()) {
