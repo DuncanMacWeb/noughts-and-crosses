@@ -28,7 +28,7 @@ export class NoughtsAndCrosses {
   start() {
     this.currentPlayer.move(this, this.view)
       .then((coords) => this.doPlayerMove(coords))
-      .catch((e) => console.error(e.stack));
+      .catch((e) => console.error(e));
   }
 
   doPlayerMove(coords) {
@@ -48,7 +48,7 @@ export class NoughtsAndCrosses {
     this.currentPlayer = this.players[nextPlayerIndex];
     this.currentPlayer.move(this, this.view)
       .then((coords) => this.doPlayerMove(coords))
-      .catch((e) => console.error(e.stack));
+      .catch((e) => console.error(e));
   }
 
   getCellByCoords(coords) {
