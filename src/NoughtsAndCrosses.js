@@ -95,7 +95,7 @@ export class NoughtsAndCrosses {
   checkWon() {
     // horizontals
     for (let y = 0; y < this.dimensions[1]; y++) {
-      if (this.board[y][0] !== undefined && (this.board[y][0] === this.board[y][1]) && (this.board[y][1] === this.board[y][2])) {
+      if (this.board[0][y] !== undefined && (this.board[0][y] === this.board[1][y]) && (this.board[1][y] === this.board[2][y])) {
         let highlightCoords = [];
         for (let x = 0; x < this.dimensions[0]; x++) {
           highlightCoords.push([x, y]);
@@ -107,7 +107,7 @@ export class NoughtsAndCrosses {
 
     // verticals
     for (let x = 0; x < this.dimensions[0]; x++) {
-      if (this.board[0][x] !== undefined && (this.board[0][x] === this.board[1][x]) && (this.board[1][x] === this.board[2][x])) {
+      if (this.board[x][0] !== undefined && (this.board[x][0] === this.board[x][1]) && (this.board[x][1] === this.board[x][2])) {
         let highlightCoords = [];
         for (let y = 0; y < this.dimensions[1]; y++) {
           highlightCoords.push([x, y]);
