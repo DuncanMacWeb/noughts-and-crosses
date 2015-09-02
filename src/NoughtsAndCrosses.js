@@ -51,6 +51,8 @@ export class NoughtsAndCrosses {
       .catch((e) => console.error(e));
   }
 
+  getCellByLinearIndex = i => this.getCellByCoords(this.getCoordinatesByLinearIndex(i))
+
   getCellByCoords(coords) {
     // this.board = multidimensionalArray with least-significant dimension first [x, y, z]
     // this.getCoordinatesByLinearIndex also returns a least-significant-dimension first array
