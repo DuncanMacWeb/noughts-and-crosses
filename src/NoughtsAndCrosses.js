@@ -37,14 +37,14 @@ export class NoughtsAndCrosses {
   start() {
     this.currentPlayer.move(this, this.view)
       .then((coords) => this.doPlayerMove(coords))
-      .catch((e) => console.error(e.stack));
+      .catch((e) => console.error(e));
   }
 
   doPlayerMove(coords) {
     const playerIndex = this.players.indexOf(this.currentPlayer);
     const playerSymbol = this.getPlayerSymbol(playerIndex);
     let x = coords[0], y = coords[1];
-    this.board[y][x] = playerIndex;
+    this.board[x][y] = playerIndex;
     this.view.showMove(coords, playerSymbol);
 
     if (this.checkWon()) {
@@ -57,29 +57,22 @@ export class NoughtsAndCrosses {
     this.currentPlayer = this.players[nextPlayerIndex];
     this.currentPlayer.move(this, this.view)
       .then((coords) => this.doPlayerMove(coords))
-      .catch((e) => console.error(e.stack));
+      .catch((e) => console.error(e));
   }
+
+  getCellByLinearIndex = i => this.getCellByCoords(this.getCoordinatesByLinearIndex(i))
 
   getCellByCoords(coords) {
     // this.board = multidimensionalArray with least-significant dimension first [x, y, z]
-    // this.getCoordinatesByLinearIndex also returns a least-significant-dimension first array
+    // this.getCoordinatesByLinearIndex returns a least-significant-dimension first array
     // return this.board[...[this.getCoordinatesByLinearIndex(i)]]
     if (coords.length !== this.dimensions.length) {
       throw new Error(`Co-ordinates passed to getCellByCoords not the same length (${coords.length}) as the number of dimensions (${this.dimensions.length})`)
     }
 
-    // GCBC == 'getCellByCoords'
-    /* function _gcbc(board, coords) {
-      if (coords.length > 1) {
-        let m = coords.shift();   // use the least-significant coord
-        return _gcbc(board[m], coords);   // call self with least-sig dimension removed
-      } else {
-        return board[coords[0]]   // last dimension -- return value at remaining coord
-      }
-    } */
     let _gcbc = (board, coords) => coords.length > 1 ?
-        _gcbc(board[ coords.shift() ], coords) :
-        board[coords[0]];
+        _gcbc(board[ coords.shift() ], coords) : // use the least-significant coord
+        board[coords[0]]; // last dimension -- return value at remaining coord
 
     return _gcbc(this.board, coords);
   }

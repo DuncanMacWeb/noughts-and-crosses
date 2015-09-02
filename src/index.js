@@ -1,6 +1,7 @@
 import {NoughtsAndCrosses} from './NoughtsAndCrosses';
 import {NACDOMView} from './NACViews';
 import {HumanPlayer} from './HumanPlayer';
+import {ComputerPlayer} from './ComputerPlayer';
 
 document.addEventListener('DOMContentLoaded', () => {
   if (document.querySelector) {
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set up game with players, view and dimensions
     let game = new NoughtsAndCrosses(
-      [new HumanPlayer(), new HumanPlayer()],
+      [new ComputerPlayer(), new HumanPlayer()],
       new NACDOMView(targetEl) );
     game.start();
   }
