@@ -25,13 +25,16 @@ export class NoughtsAndCrosses {
     return i < len ? symbols[i] : (i - len).toString();
   }
 
-  start() {
-    this.currentPlayer.move(this, this.view)
-      .then((coords) => this.doPlayerMove(coords))
-      .catch((e) => console.error(e));
+  async start() {
+    try {
+      let coords = await this.currentPlayer.move(this, this.view);
+      this.doPlayerMove(coords);
+    } catch(e) {
+      console.error(e)
+    }
   }
 
-  doPlayerMove(coords) {
+  async doPlayerMove(coords) {
     const playerIndex = this.players.indexOf(this.currentPlayer);
     const playerSymbol = this.getPlayerSymbol(playerIndex);
     let x = coords[0], y = coords[1];
@@ -46,9 +49,12 @@ export class NoughtsAndCrosses {
 
     let nextPlayerIndex = (playerIndex + 1) % this.players.length;
     this.currentPlayer = this.players[nextPlayerIndex];
-    this.currentPlayer.move(this, this.view)
-      .then((coords) => this.doPlayerMove(coords))
-      .catch((e) => console.error(e));
+    try {
+      let coords = await this.currentPlayer.move(this, this.view);
+      this.doPlayerMove(coords);
+    } catch(e) {
+      console.error(e)
+    }
   }
 
   getCellByLinearIndex = i => this.getCellByCoords(this.getCoordinatesByLinearIndex(i))
