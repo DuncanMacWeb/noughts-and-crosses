@@ -8,7 +8,7 @@ describe('NoughtsAndCrosses 3x3', function () {
   var _ = undefined;
 
   beforeEach(function () {
-    game = new NoughtsAndCrosses([], new NACView(), [3, 3]);
+    game = new NoughtsAndCrosses({players: [], view: new NACView(), dimensions: [3, 3]});
     assert.equal(game.checkWon(), false);
   });
 
@@ -66,7 +66,7 @@ describe('NoughtsAndCrosses Coords', function () {
 
   describe('#getCoordinatesByLinearIndex()', function () {
     it('should transform linear coords to normal ones in 3', function () {
-      var game = new NoughtsAndCrosses([], new NACView(), [3]);
+      var game = new NoughtsAndCrosses({players: [], view: new NACView(), dimensions: [3]});
 
       assert.deepEqual(game.getCoordinatesByLinearIndex(2), [2]);
 
@@ -74,7 +74,7 @@ describe('NoughtsAndCrosses Coords', function () {
     });
 
     it('should transform linear coords to normal ones in 3x3', function () {
-      var game = new NoughtsAndCrosses([], new NACView(), [3, 3]);
+      var game = new NoughtsAndCrosses({players: [], view: new NACView(), dimensions: [3, 3]});
 
       assert.deepEqual(game.getCoordinatesByLinearIndex(3*2 + 1), [1, 2]);
 
@@ -84,7 +84,7 @@ describe('NoughtsAndCrosses Coords', function () {
     });
 
     it('should transform linear coords to normal ones in 3x3x3', function () {
-      var game = new NoughtsAndCrosses([], new NACView(), [3, 3, 3]);
+      var game = new NoughtsAndCrosses({players: [], view: new NACView(), dimensions: [3, 3, 3]});
 
       assert.deepEqual(game.getCoordinatesByLinearIndex(9*2 + 3*1 + 2), [2, 1, 2]);
 
@@ -94,16 +94,16 @@ describe('NoughtsAndCrosses Coords', function () {
 
   describe('#getCellByCoords', () => {
     it('should return “X” for [2, 0, 1] and [1, 2, 2, 4]', () => {
-      let game = new NoughtsAndCrosses([], new NACView(), [3, 3, 3])
+      let game = new NoughtsAndCrosses({players: [], view: new NACView(), dimensions: [3, 3, 3]})
       game.board[2][0][1] = 'X'
       assert.equal(game.getCellByCoords([2, 0, 1]), 'X')
 
-      game = new NoughtsAndCrosses([], new NACView(), [2, 3, 4, 5])
+      game = new NoughtsAndCrosses({players: [], view: new NACView(), dimensions: [2, 3, 4, 5]})
       game.board[1][2][2][4] = 'X'
       assert.equal(game.getCellByCoords([1, 2, 2, 4]), 'X')
     });
     it('should raise an error when incorrect numbers of dimensions are passed', () => {
-      let game = new NoughtsAndCrosses([], new NACView(), [3, 3, 3])
+      let game = new NoughtsAndCrosses({players: [], view: new NACView(), dimensions: [3, 3, 3]})
       game.board[2][0][1] = 'X'
       assert.throws(() => game.getCellByCoords([2, 0, 1, 2]), /not the same length/)
     })

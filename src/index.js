@@ -18,9 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // TODO: find/set up options object
 
     // Set up game with players, view and dimensions
-    let game = new NoughtsAndCrosses(
-      [new ComputerPlayer(), new HumanPlayer()],
-      new NACDOMView(targetEl) );
-    game.start();
+    let game = new NoughtsAndCrosses({
+      players: [new ComputerPlayer(), new HumanPlayer()],
+      view: new NACDOMView(targetEl)
+    });
+    game.start(); // or new NAC({..., autostart: true})
   }
 });

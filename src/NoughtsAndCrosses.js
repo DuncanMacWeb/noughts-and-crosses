@@ -1,7 +1,7 @@
 import { multidimensionalArray } from './utilities/array'
 
 export class NoughtsAndCrosses {
-  constructor (players, view, dimensions = [3, 3]) {
+  constructor ({players, view, dimensions = [3, 3], autostart = false}) {
     /*if (dimensions.length > 2) {
       throw new Error('NoughtsAndCrosses doesn’t support more than two dimensions, sorry!');
     }*/
@@ -12,11 +12,21 @@ export class NoughtsAndCrosses {
     this.players = players;
 
     this.dimensions = dimensions;
-    this.board = multidimensionalArray(dimensions);
+    this.autostart = autostart;
+
+    this.initialize();
+  }
+
+  initialize({autostart = false} = {}) {
+    this.board = multidimensionalArray(this.dimensions);
 
     this.view.initialize(this);
 
     this.currentPlayer = this.players[0];
+
+    if (autostart) {
+      this.start();
+    }
   }
 
   getPlayerSymbol(i) {
@@ -32,6 +42,10 @@ export class NoughtsAndCrosses {
     } catch(e) {
       console.error(e)
     }
+  }
+
+  restart() {
+    this.initialize({autostart: true});
   }
 
   async doPlayerMove(coords) {
