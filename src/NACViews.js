@@ -36,6 +36,10 @@ export class NACDOMView extends NACView {
 
     if (typeof this.form === 'undefined') {
       this.form = document.createElement('form');
+      this.form.addEventListener('submit', (event)=> {
+        this.game.restart();
+        event.preventDefault();
+      });
       this.element.appendChild(this.form);
     }
 
@@ -52,9 +56,6 @@ export class NACDOMView extends NACView {
     let button = document.createElement('button');
     button.innerHTML = 'Restart';
     button.type = 'submit';
-    this.form.addEventListener('submit', ()=> {
-      this.game.restart();
-    });
     this.form.appendChild(button);
 
     this.tdList = document.getElementById('nac')
