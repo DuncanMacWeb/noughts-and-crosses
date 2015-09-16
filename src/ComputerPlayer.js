@@ -6,7 +6,7 @@ export class ComputerPlayer extends Player {
   }
 
   move = (game, view) => {
-    let totalNumCells = view.dimensions.reduce((acc, val) => acc * val);
+    let totalNumCells = game.dimensions.reduce((acc, val) => acc * val);
 
     let startCell = Math.floor(Math.random() * totalNumCells);
 

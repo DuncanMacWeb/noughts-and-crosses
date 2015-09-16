@@ -1,6 +1,10 @@
 export class NACView {
   constructor() { }
-  initialize(dimensions) { } // dimensions is an array
+
+  initialize(game) {
+    this.game = game;
+  }
+
   showMove(coords, playerSymbol) {}
   setInputCallback(inputCallback) {}
   highlightWin(coordsList) {}
@@ -23,16 +27,17 @@ export class NACDOMView extends NACView {
     this.options.winHighlightColour = this.options.winHighlightColour || 'red';
   }
 
-  initialize(dimensions) {
-    if (dimensions.length > 2) {
+  initialize(game) {
+    super.initialize(game);
+
+    if (this.game.dimensions.length > 2) {
       throw new Error('NACDOMView doesn’t support more than two dimensions, sorry!');
     }
-    this.dimensions = dimensions;
 
     let table = '';
-    for (let y = 0; y < dimensions[1]; y++) {
+    for (let y = 0; y < this.game.dimensions[1]; y++) {
       table += '<tr>';
-      for (let x = 0; x < dimensions[0]; x++) {
+      for (let x = 0; x < this.game.dimensions[0]; x++) {
         table += '<td></td>';
       }
       table += '</tr>';
@@ -42,8 +47,8 @@ export class NACDOMView extends NACView {
     this.tdList = document.getElementById('nac')
       .querySelectorAll('td');
 
-    for (let y = 0; y < dimensions[1]; y++) {
-      for (let x = 0; x < dimensions[0]; x++) {
+    for (let y = 0; y < this.game.dimensions[1]; y++) {
+      for (let x = 0; x < this.game.dimensions[0]; x++) {
         this.createInputCallback(x, y);
       }
     }
@@ -52,7 +57,7 @@ export class NACDOMView extends NACView {
   showMove(coords, playerSymbol) {
     let x = coords[0];
     let y = coords[1];
-    this.tdList[y*this.dimensions[1] + x].innerHTML = playerSymbol;
+    this.tdList[y*this.game.dimensions[1] + x].innerHTML = playerSymbol;
   }
 
   setInputCallback(inputCallback) {
@@ -60,7 +65,7 @@ export class NACDOMView extends NACView {
   }
 
   createInputCallback(x, y) {
-    this.tdList[y*this.dimensions[1] + x].addEventListener('click', (event) => {
+    this.tdList[y*this.game.dimensions[1] + x].addEventListener('click', (event) => {
       //console.log('tdList[' + (y*3 + x).toString() + ']: y = ' + y.toString() + ', x = ' + x.toString());
 
       if (this.inputCallback) {
@@ -74,7 +79,7 @@ export class NACDOMView extends NACView {
     for (let coords of coordsList) {
       let x = coords[0];
       let y = coords[1];
-      let el = this.tdList[y*this.dimensions[1] + x];
+      let el = this.tdList[y*this.game.dimensions[1] + x];
       el.style.background = this.options.winHighlightColour;
     }
   }

@@ -14,7 +14,7 @@ export class NoughtsAndCrosses {
     this.dimensions = dimensions;
     this.board = multidimensionalArray(dimensions);
 
-    this.view.initialize(dimensions);
+    this.view.initialize(this);
 
     this.currentPlayer = this.players[0];
   }
