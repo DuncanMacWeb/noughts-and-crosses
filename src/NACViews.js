@@ -28,11 +28,13 @@ export class NACDOMView extends NACView {
   }
 
   initialize(game) {
-    super.initialize(game);
+    super.initialize(...arguments);
 
     if (this.game.dimensions.length > 2) {
       throw new Error('NACDOMView doesn’t support more than two dimensions, sorry!');
     }
+
+    let form = document.createElement('form');
 
     let table = '';
     for (let y = 0; y < this.game.dimensions[1]; y++) {
@@ -42,7 +44,20 @@ export class NACDOMView extends NACView {
       }
       table += '</tr>';
     }
-    this.element.innerHTML = `<table id="nac">${table}</table>`;
+    form.innerHTML = `<table id="nac">${table}</table>`;
+
+    let button = document.createElement('button');
+    button.innerHTML = 'Restart';
+    button.type = 'submit';
+
+    form.addEventListener('submit', ()=> {
+      this.game.restart();
+    });
+
+    form.appendChild(button);
+
+    this.element.appendChild(form);
+
 
     this.tdList = document.getElementById('nac')
       .querySelectorAll('td');
