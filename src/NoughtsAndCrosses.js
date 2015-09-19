@@ -66,8 +66,9 @@ export class NoughtsAndCrosses {
     return !this.board[x][y];  // board array position must be truthy if occupied, falsy if unoccupied
   }
 
-  async move(player, coords) {
-    const playerSymbol = this.getPlayerSymbol( this.players.indexOf(player) );
+  move(player, coords) {
+    let playerIndex = this.players.indexOf(player);
+    const playerSymbol = this.getPlayerSymbol( playerIndex );
     let x = coords[0], y = coords[1];
     this.board[x][y] = playerIndex;
     this.view.showMove(coords, playerSymbol);
