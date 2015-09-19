@@ -31,9 +31,12 @@ export class NoughtsAndCrosses {
   }
 
   getPlayerSymbol(i) {
+    // After using the characters in 'symbols', we
+    // use numbers starting from 1. (1, 2, 3 etc)
+    // Start from 1 because '0' is confused with 'O'.
     const symbols = ['X', 'O', 'Z'],
       len = symbols.length;
-    return i < len ? symbols[i] : (i - len).toString();
+    return i < len ? symbols[i] : (i + 1 - len).toString();
   }
 
   async run() {
