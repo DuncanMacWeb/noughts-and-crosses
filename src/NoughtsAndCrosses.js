@@ -43,7 +43,7 @@ export class NoughtsAndCrosses {
       if (this.validMove(coords)) {
         this.move(this.currentPlayer, coords);
         if (this.checkWon()) {
-          this.view.log(`Player ${playerSymbol} has won`);
+          this.view.log(`Player ${this.getPlayerSymbol( playerIndex )} has won`);
           this.gameFinished = true;
           return;
         }
