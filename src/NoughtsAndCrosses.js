@@ -8,7 +8,6 @@ export class NoughtsAndCrosses {
 
     this.view = view;
 
-    this.gameFinished = false;
     this.players = players;
 
     this.dimensions = dimensions;
@@ -18,6 +17,8 @@ export class NoughtsAndCrosses {
   }
 
   initialize({autostart = false} = {}) {
+    this.gameFinished = false;
+
     this.board = multidimensionalArray(this.dimensions);
 
     this.view.initialize(this);
