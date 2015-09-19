@@ -22,6 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
       players: [new ComputerPlayer(), new HumanPlayer()],
       view: new NACDOMView(targetEl)
     });
-    game.start(); // or new NAC({..., autostart: true})
+    game.run(); // or new NAC({..., autostart: true})
   }
 });

@@ -25,7 +25,7 @@ export class NoughtsAndCrosses {
     this.currentPlayer = this.players[0];
 
     if (autostart) {
-      this.start();
+      this.run();
     }
   }
 
@@ -35,12 +35,25 @@ export class NoughtsAndCrosses {
     return i < len ? symbols[i] : (i - len).toString();
   }
 
-  async start() {
-    try {
-      let coords = await this.currentPlayer.move(this, this.view);
-      this.doPlayerMove(coords);
-    } catch(e) {
-      console.error(e)
+  async run() {
+    let playerIndex, nextPlayerIndex, coords;
+    while (!this.gameFinished) {
+      playerIndex = this.players.indexOf(this.currentPlayer);
+      coords = await this.currentPlayer.move(this, this.view);
+      if (this.validMove(coords)) {
+        this.move(this.currentPlayer, coords);
+        if (this.checkWon()) {
+          this.view.log(`Player ${playerSymbol} has won`);
+          this.gameFinished = true;
+          return;
+        }
+        if (!this.gameFinished) {
+          nextPlayerIndex = (playerIndex + 1) % this.players.length;
+          this.currentPlayer = this.players[nextPlayerIndex];
+        }
+      } else {
+        this.view.error('Sorry, you can’t move there!');
+      }
     }
   }
 
@@ -48,27 +61,16 @@ export class NoughtsAndCrosses {
     this.initialize({autostart: true});
   }
 
-  async doPlayerMove(coords) {
-    const playerIndex = this.players.indexOf(this.currentPlayer);
-    const playerSymbol = this.getPlayerSymbol(playerIndex);
+  validMove(coords) {
+    let x = coords[0], y = coords[1];
+    return !this.board[x][y];  // board array position must be truthy if occupied, falsy if unoccupied
+  }
+
+  async move(player, coords) {
+    const playerSymbol = this.getPlayerSymbol( this.players.indexOf(player) );
     let x = coords[0], y = coords[1];
     this.board[x][y] = playerIndex;
     this.view.showMove(coords, playerSymbol);
-
-    if (this.checkWon()) {
-      console.log('Player ' + playerSymbol + ' has won');
-      this.gameFinished = true;
-      return;
-    }
-
-    let nextPlayerIndex = (playerIndex + 1) % this.players.length;
-    this.currentPlayer = this.players[nextPlayerIndex];
-    try {
-      let coords = await this.currentPlayer.move(this, this.view);
-      this.doPlayerMove(coords);
-    } catch(e) {
-      console.error(e)
-    }
   }
 
   getCellByLinearIndex = i => this.getCellByCoords(this.getCoordinatesByLinearIndex(i))
