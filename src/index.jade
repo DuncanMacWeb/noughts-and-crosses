@@ -65,6 +65,14 @@ html
       #nac tr:last-child td
         border-bottom none
 
+      @keyframes fadeout {
+        0% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
     script(src="index.js", data-nac-id="nac-container")
   body
     h1 Noughts and Crosses

@@ -58,6 +58,11 @@ export class NACDOMView extends NACView {
     button.type = 'submit';
     this.form.appendChild(button);
 
+    this.messages = document.createElement('div');
+    this.messages.role = 'alert';
+    this.messages.style = 'display: none';
+    this.form.appendChild(this.messages);
+
     this.tdList = document.getElementById('nac')
       .querySelectorAll('td');
     for (let y = 0; y < this.game.dimensions[1]; y++) {
@@ -65,6 +70,19 @@ export class NACDOMView extends NACView {
         this.createInputCallback(x, y);
       }
     }
+  }
+
+  displayMessage(str, color) {
+    this.messages.innerHTML = str;
+    this.messages.style = `display: block; color: ${color}; animation: fadeout 1s linear 3s 1 normal forwards running;`;
+  }
+
+  log(str) {
+    this.displayMessage(str, 'green');
+  }
+
+  error(str) {
+    this.displayMessage(str, 'red');
   }
 
   showMove(coords, playerSymbol) {
