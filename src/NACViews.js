@@ -75,9 +75,12 @@ export class NACDOMView extends NACView {
   displayMessage(str, color) {
     this.messages.innerHTML = str;
 
-    var newOne = this.messages.cloneNode(true);
-    this.messages.parentNode.replaceChild(newOne, this.messages);
-    this.messages = newOne;
+    // To make the animation restart, we need to remove
+    // the element from the DOM and then add it again
+    // https://css-tricks.com/restart-css-animation/
+    let messagesCopy = this.messages.cloneNode(true);
+    this.messages.parentNode.replaceChild(messagesCopy, this.messages);
+    this.messages = messagesCopy;
 
     this.messages.style.color = color;
   }
