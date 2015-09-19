@@ -61,7 +61,6 @@ export class NACDOMView extends NACView {
     this.messages = document.createElement('div');
     this.messages.role = 'alert';
     this.messages.className = 'fadeout';
-    this.messages.style = 'opactiy: 0';
     this.form.appendChild(this.messages);
 
     this.tdList = document.getElementById('nac')
@@ -80,7 +79,7 @@ export class NACDOMView extends NACView {
     this.messages.parentNode.replaceChild(newOne, this.messages);
     this.messages = newOne;
 
-    this.messages.style = `color: ${color}`;
+    this.messages.style.color = color;
   }
 
   log(str) {
