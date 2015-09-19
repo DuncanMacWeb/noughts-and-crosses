@@ -25,6 +25,9 @@ export class NoughtsAndCrosses {
 
     this.currentPlayer = this.players[0];
 
+    this.maxMoves = this.dimensions.reduce((val, acc) => val * acc);
+    this.movesPlayed = 0;
+
     if (autostart) {
       this.run();
     }
@@ -43,20 +46,30 @@ export class NoughtsAndCrosses {
       coords = await this.currentPlayer.move(this, this.view);
       if (this.validMove(coords)) {
         this.move(this.currentPlayer, coords);
-        if (this.checkWon()) {
-          this.view.log(`Player ${this.getPlayerSymbol( playerIndex )} has won`);
-          this.gameFinished = true;
-          return;
-        }
-        if (!this.gameFinished) {
-          nextPlayerIndex = (playerIndex + 1) % this.players.length;
-          this.currentPlayer = this.players[nextPlayerIndex];
+        switch (this.checkWinStatus()) {
+          case 'win':
+            this.view.log(`Player ${this.getPlayerSymbol( playerIndex )} has won`);
+            this.gameFinished = true;
+            return;
+          case 'draw':
+            this.view.log(`The game is a draw!`);
+            return;
+          case 'continue':
+            nextPlayerIndex = (playerIndex + 1) % this.players.length;
+            this.currentPlayer = this.players[nextPlayerIndex];
+            continue;
+          default:
+            throw new Error('Unhandled win state');
         }
       } else {
         this.view.error('Sorry, you can’t move there!');
       }
     }
   }
+
+  /* for (move in this.moves()) {
+    this.checkWinStatus() ? 
+  } */
 
   restart() {
     this.initialize({autostart: true});
@@ -73,6 +86,7 @@ export class NoughtsAndCrosses {
     let x = coords[0], y = coords[1];
     this.board[x][y] = playerIndex;
     this.view.showMove(coords, playerSymbol);
+    this.movesPlayed++;
   }
 
   getCellByLinearIndex = i => this.getCellByCoords(this.getCoordinatesByLinearIndex(i))
@@ -116,7 +130,7 @@ export class NoughtsAndCrosses {
     return coords;
   }
 
-  checkWon() {
+  checkWinStatus() {
     // horizontals
     for (let y = 0; y < this.dimensions[1]; y++) {
       if (this.board[0][y] !== undefined && (this.board[0][y] === this.board[1][y]) && (this.board[1][y] === this.board[2][y])) {
@@ -125,7 +139,7 @@ export class NoughtsAndCrosses {
           highlightCoords.push([x, y]);
         }
         this.view.highlightWin(highlightCoords);
-        return true;
+        return 'win';
       }
     }
 
@@ -137,7 +151,7 @@ export class NoughtsAndCrosses {
           highlightCoords.push([x, y]);
         }
         this.view.highlightWin(highlightCoords);
-        return true;
+        return 'win';
       }
     }
 
@@ -149,7 +163,7 @@ export class NoughtsAndCrosses {
         highlightCoords.push([i, i]);
       }
       this.view.highlightWin(highlightCoords);
-      return true;
+      return 'win';
     }
     if (this.board[0][2] !== undefined && (this.board[0][2] === this.board[1][1]) && (this.board[1][1] === this.board[2][0])) {
       let highlightCoords = [];
@@ -158,9 +172,13 @@ export class NoughtsAndCrosses {
         highlightCoords.push([i, this.dimensions[1] - i - 1]);
       }
       this.view.highlightWin(highlightCoords);
-      return true;
+      return 'win';
     }
 
-    return false;
+    if (this.movesPlayed >= this.maxMoves) {
+      return 'draw';
+    }
+
+    return 'continue';
   }
 }
