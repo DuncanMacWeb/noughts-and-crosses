@@ -63,7 +63,7 @@ export class NoughtsAndCrosses {
 
   validMove(coords) {
     let x = coords[0], y = coords[1];
-    return !this.board[x][y];  // board array position must be truthy if occupied, falsy if unoccupied
+    return this.board[x][y] === undefined;
   }
 
   move(player, coords) {
