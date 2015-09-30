@@ -9,6 +9,8 @@ export class NoughtsAndCrosses {
     this.view = view;
 
     this.players = players;
+    this.winCounts = players.map(p => 0);
+    this.numDraws = 0;
 
     this.dimensions = dimensions;
     this.autostart = autostart;
@@ -51,11 +53,13 @@ export class NoughtsAndCrosses {
         this.move(this.currentPlayer, coords);
         switch (this.checkWinStatus()) {
           case 'win':
-            this.view.log(`Player ${this.getPlayerSymbol( playerIndex )} has won`);
+            this.winCounts[playerIndex]++;
+            this.view.log(`Player ${this.getPlayerSymbol( playerIndex )} has won! They have won ${this.winCounts[playerIndex]} games so far`);
             this.gameFinished = true;
             return;
           case 'draw':
-            this.view.log(`The game is a draw!`);
+            this.numDraws++;
+            this.view.log(`The game is a draw! ${this.numDraws} draws so far.`);
             return;
           case 'continue':
             nextPlayerIndex = (playerIndex + 1) % this.players.length;
