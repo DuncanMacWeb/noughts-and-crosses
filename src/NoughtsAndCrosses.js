@@ -13,9 +13,8 @@ export class NoughtsAndCrosses {
     this.numDraws = 0;
 
     this.dimensions = dimensions;
-    this.autostart = autostart;
 
-    this.initialize();
+    this.initialize({autostart: autostart});
   }
 
   initialize({autostart = false} = {}) {
@@ -60,6 +59,7 @@ export class NoughtsAndCrosses {
           case 'draw':
             this.numDraws++;
             this.view.log(`The game is a draw! ${this.numDraws} draws so far.`);
+            this.gameFinished = true;
             return;
           case 'continue':
             nextPlayerIndex = (playerIndex + 1) % this.players.length;
