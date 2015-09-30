@@ -112,13 +112,14 @@ describe('NoughtsAndCrosses Coords', function () {
 });
 
 describe('#sessions', () => {
-  it('should keep track of sessions', function (done) {
+  it('should keep track of sessions', async function (done) {
+    try {
       let game = new NoughtsAndCrosses({
         players: [new ComputerPlayer(), new ComputerPlayer()],
         view: new NACView()
       });
       console.log('running game the first time')
-      game.run();
+      await game.run();
 
       console.log('testing game after first run')
       assert.equal(game.gameFinished, true);
@@ -131,17 +132,21 @@ describe('#sessions', () => {
 
       game.initialize({/*autostart: true*/});
       console.log('running game the second time')
-      game.run();
+      await game.run();
 
       console.log('testing game after second run')
       assert.equal(game.gameFinished, true);
       assert.equal(
         game.results.numWins.reduce((acc, val) => acc + val)
           + game.results.numDraws,
-        2
-        `After the second game the sum total of wins and draws should be 2`
+        2,
+          `After the second game the sum total of wins and draws should be 2`
       );
 
       done();
+    } catch (e) {
+      console.error(e.stack);
+      throw e;
+    }
   });
 });

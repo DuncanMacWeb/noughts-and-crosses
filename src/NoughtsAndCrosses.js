@@ -46,33 +46,38 @@ export class NoughtsAndCrosses {
   }
 
   async run() {
-    let playerIndex, nextPlayerIndex, coords;
-    while (!this.gameFinished) {
-      playerIndex = this.players.indexOf(this.currentPlayer);
-      coords = await this.currentPlayer.move(this, this.view);
-      if (this.validMove(coords)) {
-        this.move(this.currentPlayer, coords);
-        switch (this.checkWinStatus()) {
-          case 'win':
-            this.results.numWins[playerIndex]++;
-            this.view.log(`Player ${this.getPlayerSymbol( playerIndex )} has won! They have won ${this.results.numWins[playerIndex]} games so far`);
-            this.gameFinished = true;
-            return;
-          case 'draw':
-            this.results.numDraws++;
-            this.view.log(`The game is a draw! ${this.results.numDraws} draws so far.`);
-            this.gameFinished = true;
-            return;
-          case 'continue':
-            nextPlayerIndex = (playerIndex + 1) % this.players.length;
-            this.currentPlayer = this.players[nextPlayerIndex];
-            continue;
-          default:
-            throw new Error('Unhandled win state');
+    try {
+      let playerIndex, nextPlayerIndex, coords;
+      while (!this.gameFinished) {
+        playerIndex = this.players.indexOf(this.currentPlayer);
+        coords = await this.currentPlayer.move(this, this.view);
+        if (this.validMove(coords)) {
+          this.move(this.currentPlayer, coords);
+          switch (this.checkWinStatus()) {
+            case 'win':
+              this.results.numWins[playerIndex]++;
+              this.view.log(`Player ${this.getPlayerSymbol(playerIndex)} has won! They have won ${this.results.numWins[playerIndex]} games so far`);
+              this.gameFinished = true;
+              return;
+            case 'draw':
+              this.results.numDraws++;
+              this.view.log(`The game is a draw! ${this.results.numDraws} draws so far.`);
+              this.gameFinished = true;
+              return;
+            case 'continue':
+              nextPlayerIndex = (playerIndex + 1) % this.players.length;
+              this.currentPlayer = this.players[nextPlayerIndex];
+              continue;
+            default:
+              throw new Error('Unhandled win state');
+          }
+        } else {
+          this.view.error('Sorry, you can’t move there!');
         }
-      } else {
-        this.view.error('Sorry, you can’t move there!');
       }
+    } catch (e) {
+      console.error(e.stack);
+      throw e;
     }
   }
 

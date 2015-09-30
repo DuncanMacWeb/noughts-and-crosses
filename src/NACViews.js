@@ -8,6 +8,9 @@ export class NACView {
   showMove(coords, playerSymbol) {}
   setInputCallback(inputCallback) {}
   highlightWin(coordsList) {}
+
+  log(str) {console.log(str);}
+  error(str) {console.error(str);}
 }
 
 export class NACDOMView extends NACView {
