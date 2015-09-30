@@ -1,5 +1,6 @@
 import { NoughtsAndCrosses } from '../NoughtsAndCrosses';
 import { NACView } from '../NACViews';
+import { ComputerPlayer } from '../ComputerPlayer'
 
 var assert = require("assert");
 
@@ -9,54 +10,54 @@ describe('NoughtsAndCrosses 3x3', function () {
 
   beforeEach(function () {
     game = new NoughtsAndCrosses({players: [], view: new NACView(), dimensions: [3, 3]});
-    assert.equal(game.checkWon(), false);
+    assert.equal(game.checkWinStatus(), 'continue');
   });
 
-  describe('#checkWon()', function () {
+  describe('#checkWinStatus()', function () {
     it('should detect winning diagonals', function () {
       game.board = [
         [0, _, _],
         [_, 0, _],
         [_, _, 0]];
-      assert.equal(game.checkWon(), true);
+      assert.equal(game.checkWinStatus(), 'win');
 
       game.board = [
         [0, 0, 1],
         [0, 1, 0],
         [1, 0, 0]];
-      assert.equal(game.checkWon(), true);
+      assert.equal(game.checkWinStatus(), 'win');
     });
     it('should detect winning verticals', function () {
       game.board = [
         [0, _, 1],
         [0, 1, 1],
         [_, 1, 0]];
-      assert.equal(game.checkWon(), false);
+      assert.equal(game.checkWinStatus(), 'continue');
 
       game.board = [
         [0, _, 1],
         [0, 1, 1],
         [0, 1, 0]];
-      assert.equal(game.checkWon(), true);
+      assert.equal(game.checkWinStatus(), 'win');
 
       game.board = [
         [0, 0, 1],
         [0, _, 1],
         [1, 0, 0]];
-      assert.equal(game.checkWon(), false);
+      assert.equal(game.checkWinStatus(), 'continue');
     });
     it('should detect winning horizontals', function () {
       game.board = [
         [0, 0, 0],
         [0, 1, 1],
         [1, 0, 0]];
-      assert.equal(game.checkWon(), true);
+      assert.equal(game.checkWinStatus(), 'win');
 
       game.board = [
         [0, 0, 1],
         [0, 1, 0],
         [1, 1, 1]];
-      assert.equal(game.checkWon(), true);
+      assert.equal(game.checkWinStatus(), 'win');
     });
   });
 });
@@ -107,5 +108,40 @@ describe('NoughtsAndCrosses Coords', function () {
       game.board[2][0][1] = 'X'
       assert.throws(() => game.getCellByCoords([2, 0, 1, 2]), /not the same length/)
     })
+  });
+});
+
+describe('#sessions', () => {
+  it('should keep track of sessions', function (done) {
+      let game = new NoughtsAndCrosses({
+        players: [new ComputerPlayer(), new ComputerPlayer()],
+        view: new NACView()
+      });
+      console.log('running game the first time')
+      game.run();
+
+      console.log('testing game after first run')
+      assert.equal(game.gameFinished, true);
+      assert.equal(
+        game.results.numWins.reduce((acc, val) => acc + val)
+          + game.results.numDraws,
+        1,
+        `After the first game there should be 1 win or 1 draw`
+      );
+
+      game.initialize({/*autostart: true*/});
+      console.log('running game the second time')
+      game.run();
+
+      console.log('testing game after second run')
+      assert.equal(game.gameFinished, true);
+      assert.equal(
+        game.results.numWins.reduce((acc, val) => acc + val)
+          + game.results.numDraws,
+        2
+        `After the second game the sum total of wins and draws should be 2`
+      );
+
+      done();
   });
 });
